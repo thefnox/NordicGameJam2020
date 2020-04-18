@@ -9,11 +9,14 @@ public class ChildScript : MonoBehaviour
     public Material ConnectedMaterial;
     public Material DisconnectedMaterial;
     private ParticleSystem[] Particles;
- 
+    private int particleCount = 0;
+    public List<ParticleCollisionEvent> collisionEvents;
+
     // Start is called before the first frame update
     void Start()
     {
         Particles = GetComponentsInChildren<ParticleSystem>();
+        collisionEvents = new List<ParticleCollisionEvent>();
     }
 
     // Update is called once per frame
@@ -27,7 +30,6 @@ public class ChildScript : MonoBehaviour
         // only triggered by objects of type connector
         if (other.gameObject.CompareTag("Connector"))
         {
-            Debug.Log("Child script is currently connected to a connector");
             connector = other.gameObject;
             connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
             if (connectorScript.ConnectorActiveState == true)
