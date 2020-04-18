@@ -8,10 +8,12 @@ public class ChildScript : MonoBehaviour
     ConnectorScript connectorScript;
     public Material ConnectedMaterial;
     public Material DisconnectedMaterial;
+    private ParticleSystem[] Particles;
+ 
     // Start is called before the first frame update
     void Start()
     {
-        
+        Particles = GetComponentsInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -31,10 +33,18 @@ public class ChildScript : MonoBehaviour
             if (connectorScript.ConnectorActiveState == true)
             {
                 this.gameObject.GetComponent<Renderer>().material = ConnectedMaterial;
+                foreach (ParticleSystem particle in Particles)
+                {
+                    particle.Play();
+                }
             }
-            else if (true)
+            else
             {
                 this.gameObject.GetComponent<Renderer>().material = DisconnectedMaterial;
+                foreach (ParticleSystem particle in Particles)
+                {
+                    particle.Stop();
+                }
             }
         }
     }

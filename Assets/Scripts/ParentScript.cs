@@ -10,7 +10,7 @@ public class ParentScript : MonoBehaviour
     public bool ParentActiveState;
     GameObject connector;
     ConnectorScript connectorScript;
-    private List<GameObject> connectorList;
+    public List<GameObject> connectorList;
 
     // Start is called before the first frame update
     void Start()
@@ -21,32 +21,34 @@ public class ParentScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+       if (ParentActiveState == true)
+        {
+            StarterObject.GetComponent<Renderer>().material = ConnectedMaterial;
+            foreach (GameObject connector in connectorList)
+            {
+                var connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
+                connectorScript.ConnectorActiveState = ParentActiveState;
+            }
+        }
+        else
+        {
+            StarterObject.GetComponent<Renderer>().material = DisconnectedMaterial;
+            foreach (GameObject connector in connectorList)
+            {
+                var connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
+                connectorScript.ConnectorActiveState = ParentActiveState;
+            }
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (!connectorList.Contains(other.gameObject))
-        {
-            connectorList.Add(other.gameObject);
-        }
-
-        // only triggered by objects of type connector
         if ((other.gameObject.CompareTag("Connector")) && (ParentActiveState == true))
-
         {
-            Debug.Log("Starter script is currently connected to a connector");
-            StarterObject.GetComponent<Renderer>().material = ConnectedMaterial;
-            foreach(GameObject connector in connectorList)
+            if (!connectorList.Contains(other.gameObject))
             {
-                connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
-                connectorScript.ConnectorActiveState = true;
+                connectorList.Add(other.gameObject);
             }
-        }
-        else if (true)
-        {
-            StarterObject.GetComponent<Renderer>().material = DisconnectedMaterial;
-            connectorScript.ConnectorActiveState = false;
         }
     }
 }
