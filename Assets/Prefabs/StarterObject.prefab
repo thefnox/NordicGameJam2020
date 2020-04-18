@@ -108,4 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StarterObject: {fileID: 5713998594587017417}
-  ConnectedMaterial: {fileID: 2100000, guid: 220fe7e1824c4b84b91535aa9c9ac702, type: 2}
+  ConnectedMaterial: {fileID: 2100000, guid: c4648ce294ffb59489401d587e7cb129, type: 2}
+  DisconnectedMaterial: {fileID: 2100000, guid: 220fe7e1824c4b84b91535aa9c9ac702,
+    type: 2}
+  ParentActiveState: 0
