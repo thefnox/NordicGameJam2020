@@ -10,6 +10,7 @@ public class ParentScript : MonoBehaviour
     public bool ParentActiveState;
     GameObject connector;
     ConnectorScript connectorScript;
+    private List<GameObject> connectorList;
 
     // Start is called before the first frame update
     void Start()
@@ -25,23 +26,27 @@ public class ParentScript : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("Trigger is triggered");
+        if (!connectorList.Contains(other.gameObject))
+        {
+            connectorList.Add(other.gameObject);
+        }
 
         // only triggered by objects of type connector
         if ((other.gameObject.CompareTag("Connector")) && (ParentActiveState == true))
+
         {
             Debug.Log("Starter script is currently connected to a connector");
             StarterObject.GetComponent<Renderer>().material = ConnectedMaterial;
-            connector = other.gameObject;
-            connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
-            connectorScript.ConnectorActiveState = true;
-
-            // other.gameObject.GetComponent<Renderer>().material = ConnectedMaterial;
+            foreach(GameObject connector in connectorList)
+            {
+                connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
+                connectorScript.ConnectorActiveState = true;
+            }
         }
         else if (true)
         {
             StarterObject.GetComponent<Renderer>().material = DisconnectedMaterial;
-            // other.gameObject.GetComponent<Renderer>().material = DisconnectedMaterial;
+            connectorScript.ConnectorActiveState = false;
         }
     }
 }
