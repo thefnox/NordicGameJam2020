@@ -18,7 +18,6 @@ public class SelectableObject : MonoBehaviour
     public bool placed = false;
     [HideInInspector]
     public List<GameObject> colliders = new List<GameObject>();
-    private GameObject selectObjectInstance;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +26,12 @@ public class SelectableObject : MonoBehaviour
         var box = gameObject.AddComponent<BoxCollider>();
         box.isTrigger = true;
         box.size = collisionSize;
-        selectObjectInstance = Instantiate(selectOverlayObject, transform);
-        selectObjectInstance.transform.localScale = collisionSize;
-        selectObjectInstance.transform.localPosition = collisionCenter;
+
+        selectOverlayObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        selectOverlayObject.name = "SelectionOverlay";
+        selectOverlayObject.transform.parent = transform;
+        selectOverlayObject.transform.localScale = collisionSize;
+        selectOverlayObject.transform.localPosition = collisionCenter;
     }
 
     public void OnDrawGizmos()
@@ -84,9 +86,9 @@ public class SelectableObject : MonoBehaviour
 
     public void Update()
     {
-        if (selectObjectInstance != null)
+        if (selectOverlayObject != null)
         {
-            selectObjectInstance.SetActive(!placed);
+            selectOverlayObject.SetActive(!placed);
         }
     }
 
