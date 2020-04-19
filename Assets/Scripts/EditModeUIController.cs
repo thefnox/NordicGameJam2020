@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class EditModeUIController : MonoBehaviour
 {
     public SelectableObject selectionObject;
-    public float selectionHeight = 0.0f;
+    public float selectionHeight = 1.0f;
     public bool rotationChangeMode = false;
     public bool heightChangeMode = false;
     public bool deleteMode = false;
@@ -22,15 +22,17 @@ public class EditModeUIController : MonoBehaviour
     public Text costLabel;
     public RaycastHit[] raycastHits;
 
+    public void Start()
+    {
+        parentObj = ServiceLocator.Resolve<IGameService>().LoadState();
+    }
+
     public void SetSelected(GameObject obj)
     {
-        if (!parentObj)
-        {
-            parentObj = new GameObject("ItemContainer");
-        }
         var instance = Instantiate(obj, parentObj.transform);
         selectionObject = instance.GetComponent<SelectableObject>();
-        selectionHeight = 1f;
+        selectionObject.PickUp();
+        selectionHeight = selectionObject.collisionSize.y / 1.9f;
         selectionRotation = Vector3.zero;
         PositionSelectionObject();
     }
@@ -38,7 +40,8 @@ public class EditModeUIController : MonoBehaviour
     public void PlayMode()
     {
         SaveState();
-        SceneManager.LoadScene("PlayTest", LoadSceneMode.Additive);
+        ServiceLocator.Resolve<IGameService>().TogglePlayMode(true);
+        SceneManager.LoadScene("PlayTest", LoadSceneMode.Single);
     }
 
     public void PlaceObject()
@@ -161,15 +164,15 @@ public class EditModeUIController : MonoBehaviour
             TryPickupObject();
         } else if (selectionObject != null) {
             PositionSelectionObject();
-            if (selectionObject.selectOverlayObject != null)
+            if (selectionObject.selectOverlay != null)
             {
                 if (!selectionObject.CanPlace())
                 {
-                    selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionDeniedMaterial;
+                    selectionObject.selectOverlay.GetComponent<MeshRenderer>().material = selectionDeniedMaterial;
                 }
                 else
                 {
-                    selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionMaterial;
+                    selectionObject.selectOverlay.GetComponent<MeshRenderer>().material = selectionMaterial;
                 }
             }
             if (Input.GetButtonDown("Fire1"))

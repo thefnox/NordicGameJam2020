@@ -7,7 +7,10 @@ public static class ServiceLocator
 
     public static void Register<T>(object serviceInstance)
     {
-        Services[typeof(T)] = serviceInstance;
+        if (!Services.ContainsKey(typeof(T)))
+        {
+            Services[typeof(T)] = serviceInstance;
+        }
     }
 
     public static T Resolve<T>()

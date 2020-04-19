@@ -8,6 +8,7 @@ public class GameHandler : IGameService
     public ObjectsWithPrefab[] objects;
     public int money;
     public int startMoney;
+    public bool playMode = false;
     public List<SerializedSelectable> state = new List<SerializedSelectable>();
 
     public void AddMoney(int amount)
@@ -39,7 +40,9 @@ public class GameHandler : IGameService
                 new Quaternion(serialized.rotation.x, serialized.rotation.y, serialized.rotation.z, serialized.rotation.w),
                 parent.transform
             );
-            list.Add(gameObj.GetComponent<SelectableObject>());
+            var selectable = gameObj.GetComponent<SelectableObject>();
+            selectable.PlaceObject();
+            list.Add(selectable);
         }
 
         return parent;
@@ -57,6 +60,16 @@ public class GameHandler : IGameService
         {
             state.Add(new SerializedSelectable(obj));
         }
+    }
+
+    public bool IsInPlay()
+    {
+        return playMode;
+    }
+
+    public void TogglePlayMode(bool toggle)
+    {
+        playMode = toggle;
     }
 
     public GameHandler(ObjectsWithPrefab[] objects, int startMoney)
