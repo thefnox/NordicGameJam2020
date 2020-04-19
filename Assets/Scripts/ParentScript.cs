@@ -29,17 +29,9 @@ public class ParentScript : MonoBehaviour
         {
             StarterObject.GetComponent<Renderer>().material = DisconnectedMaterial;
         }
-    }
-
-    /* private void OnTriggerStay(Collider other)
-    {
-        if ((other.gameObject.CompareTag("Connector")) && (ParentActiveState == true))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (!connectorList.Contains(other.gameObject))
-            {
-                connectorList.Add(other.gameObject);
-            }
+            ParentActiveState = true;
         }
     }
-    */
 }
