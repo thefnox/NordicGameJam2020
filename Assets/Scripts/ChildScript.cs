@@ -9,14 +9,16 @@ public class ChildScript : MonoBehaviour
     public Material ConnectedMaterial;
     public Material DisconnectedMaterial;
     private ParticleSystem[] Particles;
-    private int particleCount = 0;
-    public List<ParticleCollisionEvent> collisionEvents;
+    PartCollisionScript particleCollisionScript;
+    private int currentTemp;
+    private int maxTemp;
 
     // Start is called before the first frame update
     void Start()
     {
         Particles = GetComponentsInChildren<ParticleSystem>();
-        collisionEvents = new List<ParticleCollisionEvent>();
+        currentTemp = 0;
+        maxTemp = 15000;
     }
 
     // Update is called once per frame
@@ -48,6 +50,21 @@ public class ChildScript : MonoBehaviour
                     particle.Stop();
                 }
             }
+        }
+    }
+
+    void OnParticleCollision(GameObject other)
+    {
+        var script = other.gameObject.GetComponent<PartCollisionScript>();
+        if (currentTemp < maxTemp)
+        {
+            currentTemp = currentTemp + script.numCollisionEvents;
+            float lerp = Mathf.PingPong(Time.time, 3) / 3;
+            this.gameObject.GetComponent<Renderer>().material.Lerp(DisconnectedMaterial, ConnectedMaterial, lerp);
+        }
+        else
+        {
+            Debug.Log("You burned the eggo");
         }
     }
 }
