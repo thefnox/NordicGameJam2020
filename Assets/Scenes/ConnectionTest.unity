@@ -2286,6 +2286,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6660410641611802688, guid: eef0a7e25c7ecfd43a959ad417e8a981,
+        type: 3}
+      propertyPath: DisconnectedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 023d99590e4ec3349bada57b0d9a8636, type: 2}
+    - target: {fileID: 6660410641611802688, guid: eef0a7e25c7ecfd43a959ad417e8a981,
+        type: 3}
+      propertyPath: BrokenMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2da2906fa0594d546a426330cc96acc8, type: 2}
     - target: {fileID: 6942918176474567713, guid: eef0a7e25c7ecfd43a959ad417e8a981,
         type: 3}
       propertyPath: m_Name
