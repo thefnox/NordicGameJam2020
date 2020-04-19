@@ -6,6 +6,7 @@ public class ChildScript : MonoBehaviour
 {
     GameObject connector;
     ConnectorScript connectorScript;
+    public List<GameObject> connectorList;
     public Material ConnectedMaterial;
     public Material DisconnectedMaterial;
     public Material BrokenMaterial;
@@ -14,6 +15,8 @@ public class ChildScript : MonoBehaviour
     private int currentTemp;
     private int maxTemp;
     float lerp;
+    public bool ChildActiveState = false;
+    private bool connectorVariable = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +29,25 @@ public class ChildScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        foreach (GameObject connector in connectorList)
+        {
+            var connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
+            if (connectorScript.ConnectorActiveState == true)
+            {
+                ChildActiveState = true;
+            }
+            else
+                ChildActiveState = false;
+        }
+
+        if (ChildActiveState == true)
+        {
+            this.gameObject.GetComponent<Renderer>().material = ConnectedMaterial;
+        }
+
+        else
+            this.gameObject.GetComponent<Renderer>().material = DisconnectedMaterial;
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -36,17 +57,22 @@ public class ChildScript : MonoBehaviour
         {
             connector = other.gameObject;
             connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
-            if (connectorScript.ConnectorActiveState == true)
+            if (!connectorList.Contains(other.gameObject))
             {
-                this.gameObject.GetComponent<Renderer>().material = ConnectedMaterial;
+                connectorList.Add(other.gameObject);
+            }
+
+            
+            if (ChildActiveState == true)
+            {
                 foreach (ParticleSystem particle in Particles)
                 {
                     particle.Play();
                 }
+
             }
             else
             {
-                this.gameObject.GetComponent<Renderer>().material = DisconnectedMaterial;
                 foreach (ParticleSystem particle in Particles)
                 {
                     particle.Stop();

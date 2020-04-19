@@ -24,24 +24,14 @@ public class ParentScript : MonoBehaviour
        if (ParentActiveState == true)
         {
             StarterObject.GetComponent<Renderer>().material = ConnectedMaterial;
-            foreach (GameObject connector in connectorList)
-            {
-                var connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
-                connectorScript.ConnectorActiveState = ParentActiveState;
-            }
         }
         else
         {
             StarterObject.GetComponent<Renderer>().material = DisconnectedMaterial;
-            foreach (GameObject connector in connectorList)
-            {
-                var connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
-                connectorScript.ConnectorActiveState = ParentActiveState;
-            }
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    /* private void OnTriggerStay(Collider other)
     {
         if ((other.gameObject.CompareTag("Connector")) && (ParentActiveState == true))
         {
@@ -51,4 +41,5 @@ public class ParentScript : MonoBehaviour
             }
         }
     }
+    */
 }
