@@ -3196,11 +3196,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4528963697692431712, guid: 32d9a3f5f5524ea47a3a362887adc2d1,
-        type: 3}
-      propertyPath: overrideGame
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4528963697692431713, guid: 32d9a3f5f5524ea47a3a362887adc2d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3209,7 +3204,7 @@ PrefabInstance:
     - target: {fileID: 4528963697692431713, guid: 32d9a3f5f5524ea47a3a362887adc2d1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.5
+      value: 1.04
       objectReference: {fileID: 0}
     - target: {fileID: 4528963697692431713, guid: 32d9a3f5f5524ea47a3a362887adc2d1,
         type: 3}
