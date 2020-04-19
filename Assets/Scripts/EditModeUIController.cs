@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EditModeUIController : MonoBehaviour
 {
@@ -10,16 +11,23 @@ public class EditModeUIController : MonoBehaviour
     public bool rotationChangeMode = false;
     public bool heightChangeMode = false;
     public bool deleteMode = false;
+    public Material selectionMaterial;
+    public Material selectionDeniedMaterial;
     private Vector3 prevMousePos = Vector3.zero;
     private Vector3 referenceRotation = Vector3.zero;
     private Vector3 rotationReferenceVec = Vector3.zero;
-    private Vector3 heightReferenceVec = Vector3.zero;
+    private GameObject parentObj;
     public Vector3 selectionRotation = Vector3.zero;
+    public Text costLabel;
     public RaycastHit[] raycastHits;
 
     public void SetSelected(GameObject obj)
     {
-        var instance = Instantiate(obj);
+        if (!parentObj)
+        {
+            parentObj = new GameObject("ItemContainer");
+        }
+        var instance = Instantiate(obj, parentObj.transform);
         selectionObject = instance.GetComponent<SelectableObject>();
         selectionHeight = 1f;
         selectionRotation = Vector3.zero;
@@ -28,16 +36,27 @@ public class EditModeUIController : MonoBehaviour
 
     public void PlaceObject()
     {
-        selectionObject.PlaceObject();
-        selectionObject = null;
+        var cost = selectionObject.cost;
+        if (ServiceLocator.Resolve<IGameService>().GetCurrentMoney() >= cost)
+        {
+            selectionObject.PlaceObject();
+            selectionObject = null;
+            ServiceLocator.Resolve<IGameService>().AddMoney(-cost);
+        }
+    }
+
+    public void SaveState()
+    {
+        if (parentObj != null)
+        {
+            ServiceLocator.Resolve<IGameService>().SaveState(parentObj.GetComponentsInChildren<SelectableObject>());
+        }
     }
 
     public void DeleteObject()
     {
-        var cost = selectionObject.cost;
         Destroy(selectionObject.gameObject);
         selectionObject = null;
-        // TODO: Reward back cost
     }
 
     public void ToggleDeleteMode(bool toggle)
@@ -81,8 +100,30 @@ public class EditModeUIController : MonoBehaviour
             var obj = hit.collider.gameObject.GetComponentInParent<SelectableObject>();
             if (obj != null)
             {
+                var cost = obj.cost;
                 obj.PickUp();
                 selectionObject = obj;
+
+                ServiceLocator.Resolve<IGameService>().AddMoney(cost);
+            }
+        }
+    }
+
+    public void RenderCostLabel()
+    {
+        if (costLabel)
+        {
+            if (selectionObject != null)
+            {
+                costLabel.enabled = true;
+                var canvas = GetComponent<Canvas>();
+                Vector2 pos;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, Input.mousePosition, canvas.worldCamera, out pos);
+                costLabel.transform.position = canvas.transform.TransformPoint(pos);
+                costLabel.text = $"{selectionObject.objectName} (${selectionObject.cost})";
+            } else
+            {
+                costLabel.enabled = false;
             }
         }
     }
@@ -97,10 +138,6 @@ public class EditModeUIController : MonoBehaviour
             {
                 referenceRotation = selectionObject.transform.rotation.eulerAngles;
             }
-        }
-        if (!heightChangeMode && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
-        {
-            heightReferenceVec = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
         }
 
         if (Input.GetButtonDown("Cancel"))
@@ -117,6 +154,14 @@ public class EditModeUIController : MonoBehaviour
             TryPickupObject();
         } else if (selectionObject != null) {
             PositionSelectionObject();
+            if (!selectionObject.CanPlace())
+            {
+                selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionDeniedMaterial;
+            }
+            else
+            {
+                selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionMaterial;
+            }
             if (Input.GetButtonDown("Fire1"))
             {
                 if (deleteMode)
@@ -129,6 +174,7 @@ public class EditModeUIController : MonoBehaviour
                 }
             }
         }
+        RenderCostLabel();
         prevMousePos = Input.mousePosition;
     }
 }

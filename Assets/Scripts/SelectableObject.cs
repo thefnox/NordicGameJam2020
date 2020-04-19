@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 public class SelectableObject : MonoBehaviour
@@ -10,6 +12,7 @@ public class SelectableObject : MonoBehaviour
     public Material selectionDeniedMaterial;
     public Vector3 collisionCenter;
     public Vector3 collisionSize;
+    public string objectName;
     public GameObject selectOverlayObject;
     public int cost = 0;
     [HideInInspector]
@@ -78,15 +81,6 @@ public class SelectableObject : MonoBehaviour
         if (selectObjectInstance != null)
         {
             selectObjectInstance.SetActive(!placed);
-            if (!CanPlace())
-            {
-
-                selectObjectInstance.GetComponent<MeshRenderer>().material = selectionDeniedMaterial;
-            }
-            else
-            {
-                selectObjectInstance.GetComponent<MeshRenderer>().material = selectionMaterial;
-            }
         }
     }
 
@@ -103,4 +97,5 @@ public class SelectableObject : MonoBehaviour
 
         ToggleColision(true);
     }
+
 }

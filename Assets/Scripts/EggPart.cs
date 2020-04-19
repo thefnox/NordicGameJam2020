@@ -1,18 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EggPart : MonoBehaviour
+public class EggPart : IReceivesHeat
 {
-    // Start is called before the first frame update
-    void Start()
+    public void emitHeat()
     {
-        
+        throw new System.NotImplementedException();
     }
 
-    // Update is called once per frame
-    void Update()
+    public float getTemperature()
     {
-        
+        throw new System.NotImplementedException();
+    }
+
+    public float getThermalConductivity()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void receiveHeat(float value, float distance)
+    {
+        var intensity = value / (4f * Math.PI * Mathf.Pow(distance, 2f));
+
     }
 }

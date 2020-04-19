@@ -161,8 +161,9 @@ MonoBehaviour:
     type: 2}
   collisionCenter: {x: 0, y: 0, z: 0}
   collisionSize: {x: 1, y: 1.87, z: 1}
+  objectName: Test
   selectOverlayObject: {fileID: 3623490120101893527, guid: 2b40373ce9b0cf2438dba25b1a639158,
     type: 3}
-  cost: 0
+  cost: 100
   placed: 0
   colliders: []
