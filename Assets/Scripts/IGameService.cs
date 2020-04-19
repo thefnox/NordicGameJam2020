@@ -10,7 +10,13 @@ public interface IGameService
 
     void TogglePlayMode(bool toggle);
 
+    void WinGame();
 
+    void EditMode();
+
+    void PlayMode();
+
+    void StartGame();
     int GetCurrentMoney();
 
     void AddMoney(int amount);

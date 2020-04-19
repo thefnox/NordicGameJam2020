@@ -39,9 +39,11 @@ public class EditModeUIController : MonoBehaviour
 
     public void PlayMode()
     {
-        SaveState();
-        ServiceLocator.Resolve<IGameService>().TogglePlayMode(true);
-        SceneManager.LoadScene("PlayTest", LoadSceneMode.Single);
+        if (parentObj != null)
+        {
+            ServiceLocator.Resolve<IGameService>().SaveState(parentObj.GetComponentsInChildren<SelectableObject>());
+        }
+        ServiceLocator.Resolve<IGameService>().PlayMode();
     }
 
     public void PlaceObject()
@@ -52,14 +54,6 @@ public class EditModeUIController : MonoBehaviour
             selectionObject.PlaceObject();
             selectionObject = null;
             ServiceLocator.Resolve<IGameService>().AddMoney(-cost);
-        }
-    }
-
-    public void SaveState()
-    {
-        if (parentObj != null)
-        {
-            ServiceLocator.Resolve<IGameService>().SaveState(parentObj.GetComponentsInChildren<SelectableObject>());
         }
     }
 

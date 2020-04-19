@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameHandler : IGameService
 {
@@ -70,6 +72,30 @@ public class GameHandler : IGameService
     public void TogglePlayMode(bool toggle)
     {
         playMode = toggle;
+    }
+
+    public void EditMode()
+    {
+        TogglePlayMode(false);
+        Initiate.Fade("PlayTest", Color.black, 0.5f);
+    }
+
+    public void PlayMode()
+    {
+        TogglePlayMode(true);
+        Initiate.Fade("PlayTest", Color.black, 0.5f);
+    }
+
+    public void StartGame()
+    {
+        Reset();
+        EditMode();
+    }
+
+    public void WinGame()
+    {
+        TogglePlayMode(true);
+        SceneManager.LoadScene("WinScene", LoadSceneMode.Single);
     }
 
     public GameHandler(ObjectsWithPrefab[] objects, int startMoney)
