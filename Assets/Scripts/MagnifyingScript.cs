@@ -5,6 +5,8 @@ using UnityEngine;
 public class MagnifyingScript : MonoBehaviour
 {
     RaycastHit hit;
+    GameObject connector;
+    ConnectorScript connectorScript;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,5 +31,26 @@ public class MagnifyingScript : MonoBehaviour
             print("There is something in front of the object!");
         }
             
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        // only triggered by objects of type connector
+        if (other.gameObject.CompareTag("Connector"))
+        {
+            connector = other.gameObject;
+            connectorScript = connector.gameObject.GetComponent<ConnectorScript>();
+            if (connectorScript.ConnectorActiveState == true)
+            {
+                Vector3 up = transform.TransformDirection(Vector3.up);
+
+                if (Physics.Raycast(transform.position, up, out hit))
+                {
+                    var GameObject = hit.collider.gameObject;
+                    GameObject.transform.localScale = new Vector3(5, 5, 5);
+                    print("There is something in front of the object!");
+                }
+            }
+        }
     }
 }

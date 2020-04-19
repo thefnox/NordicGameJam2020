@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6660410641611802688}
   m_Layer: 0
   m_Name: Child
-  m_TagString: Untagged
+  m_TagString: Child
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,6 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1074c1fd773e21f44b614aace9e5e39b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connectorList: []
   ConnectedMaterial: {fileID: 2100000, guid: c4648ce294ffb59489401d587e7cb129, type: 2}
   DisconnectedMaterial: {fileID: 2100000, guid: 220fe7e1824c4b84b91535aa9c9ac702,
     type: 2}
+  BrokenMaterial: {fileID: 0}
+  ChildActiveState: 0

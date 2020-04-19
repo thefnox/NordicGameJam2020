@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Connector
   - World
+  - Parent
+  - Child
   layers:
   - Default
   - TransparentFX
