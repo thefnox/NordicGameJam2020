@@ -12,7 +12,7 @@ public class SelectableObject : MonoBehaviour
     public Vector3 collisionSize;
     public string objectName;
     [HideInInspector]
-    public GameObject selectOverlayObject;
+    public GameObject selectOverlay;
     public int cost = 0;
     [HideInInspector]
     public bool placed = false;
@@ -22,16 +22,22 @@ public class SelectableObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ToggleColision(false);
         var box = gameObject.AddComponent<BoxCollider>();
         box.isTrigger = true;
         box.size = collisionSize;
+    }
 
-        selectOverlayObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        selectOverlayObject.name = "SelectionOverlay";
-        selectOverlayObject.transform.parent = transform;
-        selectOverlayObject.transform.localScale = collisionSize;
-        selectOverlayObject.transform.localPosition = collisionCenter;
+    public void CreateOverlayObject()
+    {
+        if (ServiceLocator.Resolve<IGameService>().IsInPlay())
+        {
+            return;
+        }
+        selectOverlay = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        selectOverlay.name = "SelectionOverlay";
+        selectOverlay.transform.parent = transform;
+        selectOverlay.transform.localScale = collisionSize;
+        selectOverlay.transform.localPosition = collisionCenter;
     }
 
     public void OnDrawGizmos()
@@ -48,7 +54,7 @@ public class SelectableObject : MonoBehaviour
         }
         foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
         {
-            rigidbody.useGravity = false;
+            rigidbody.useGravity = ServiceLocator.Resolve<IGameService>().IsInPlay();
         }
     }
 
@@ -86,9 +92,9 @@ public class SelectableObject : MonoBehaviour
 
     public void Update()
     {
-        if (selectOverlayObject != null)
+        if (selectOverlay != null)
         {
-            selectOverlayObject.SetActive(!placed);
+            selectOverlay.SetActive(!placed);
         }
     }
 
@@ -97,6 +103,7 @@ public class SelectableObject : MonoBehaviour
         placed = false;
 
         ToggleColision(false);
+        CreateOverlayObject();
     }
 
     public void PlaceObject()
@@ -104,6 +111,11 @@ public class SelectableObject : MonoBehaviour
         placed = true;
 
         ToggleColision(true);
+        if (selectOverlay != null)
+        {
+            Destroy(selectOverlay);
+            selectOverlay = null;
+        }
     }
 
 }

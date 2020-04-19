@@ -19,6 +19,7 @@ public class PlayModeUIController : MonoBehaviour
 
 
     public void GoBack() {
-        SceneManager.LoadScene("UITest", LoadSceneMode.Additive);
+        ServiceLocator.Resolve<IGameService>().TogglePlayMode(false);
+        SceneManager.LoadScene("UITest", LoadSceneMode.Single);
     }
 }
