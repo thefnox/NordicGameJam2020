@@ -8,15 +8,15 @@ public class SelectableObject : MonoBehaviour
 {
 
     public bool canIntersect = true;
-    public Material selectionMaterial;
-    public Material selectionDeniedMaterial;
     public Vector3 collisionCenter;
     public Vector3 collisionSize;
     public string objectName;
+    [HideInInspector]
     public GameObject selectOverlayObject;
     public int cost = 0;
     [HideInInspector]
     public bool placed = false;
+    [HideInInspector]
     public List<GameObject> colliders = new List<GameObject>();
     private GameObject selectObjectInstance;
 
@@ -30,6 +30,12 @@ public class SelectableObject : MonoBehaviour
         selectObjectInstance = Instantiate(selectOverlayObject, transform);
         selectObjectInstance.transform.localScale = collisionSize;
         selectObjectInstance.transform.localPosition = collisionCenter;
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(Color.red.r, Color.red.g, Color.red.b, 0.5f);
+        Gizmos.DrawCube(collisionCenter + transform.position, collisionSize);
     }
 
     void ToggleColision(bool toggle)
