@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EditModeUIController : MonoBehaviour
@@ -32,6 +33,12 @@ public class EditModeUIController : MonoBehaviour
         selectionHeight = 1f;
         selectionRotation = Vector3.zero;
         PositionSelectionObject();
+    }
+
+    public void PlayMode()
+    {
+        SaveState();
+        SceneManager.LoadScene("PlayTest", LoadSceneMode.Additive);
     }
 
     public void PlaceObject()
@@ -154,13 +161,16 @@ public class EditModeUIController : MonoBehaviour
             TryPickupObject();
         } else if (selectionObject != null) {
             PositionSelectionObject();
-            if (!selectionObject.CanPlace())
+            if (selectionObject.selectOverlayObject != null)
             {
-                selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionDeniedMaterial;
-            }
-            else
-            {
-                selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionMaterial;
+                if (!selectionObject.CanPlace())
+                {
+                    selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionDeniedMaterial;
+                }
+                else
+                {
+                    selectionObject.selectOverlayObject.GetComponent<MeshRenderer>().material = selectionMaterial;
+                }
             }
             if (Input.GetButtonDown("Fire1"))
             {

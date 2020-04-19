@@ -1,18 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayModeUIController : MonoBehaviour
 {
+    public GameObject container;
 
-    // Use this for initialization
-    void Start()
+    public void Start()
     {
-
+        if (container)
+        {
+            container.SetActive(false);
+            Destroy(container);
+            container = null;
+        }
+        container = ServiceLocator.Resolve<IGameService>().LoadState();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
+    public void GoBack() {
+        SceneManager.LoadScene("UITest", LoadSceneMode.Additive);
     }
 }
